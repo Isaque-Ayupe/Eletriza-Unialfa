@@ -1,0 +1,6 @@
+{
+  "name": "EnergiAI",
+  "description": "Sistema de Gestão de Eficiência Energética e Telemetria de Ambientes com Agentes de IA.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
