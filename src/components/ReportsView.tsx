@@ -4,9 +4,15 @@ import { Report } from "../types";
 
 interface ReportsViewProps {
   reports: Report[];
+  stats: {
+    totalZones: number;
+    optimizationCount: number;
+    currentLoadKw: number;
+    comfortIndex: number;
+  };
 }
 
-export default function ReportsView({ reports }: ReportsViewProps) {
+export default function ReportsView({ reports, stats }: ReportsViewProps) {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   const handleDownload = (rep: Report) => {
@@ -94,14 +100,14 @@ export default function ReportsView({ reports }: ReportsViewProps) {
           <div className="flex justify-between items-start mb-4 relative z-10">
             <div>
               <p className="text-xs text-slate-500 mb-1 font-mono uppercase font-bold">Índice Médio de Conforto Térmico</p>
-              <h3 className="text-3xl font-black text-[var(--fg)]">92%</h3>
+              <h3 className="text-3xl font-black text-[var(--fg)]">{stats.comfortIndex}%</h3>
             </div>
             <div className="w-8 h-8 border border-[var(--fg)] bg-[var(--bg)] flex items-center justify-center font-mono text-[10px] font-bold text-[var(--fg)]">
               PMV
             </div>
           </div>
           <div className="w-full bg-[var(--bg)] border border-[var(--fg)]/20 h-3 mt-2 relative z-10">
-            <div className="bg-[var(--fg)] h-full" style={{ width: "92%" }}></div>
+            <div className="bg-[var(--fg)] h-full" style={{ width: `${stats.comfortIndex}%` }}></div>
           </div>
         </div>
 

@@ -470,6 +470,7 @@ export default function App() {
               {activeTab === "environments" && (
                 <EnvironmentsView
                   zones={zones}
+                  stats={stats}
                   onAddZone={handleAddZone}
                   onUpdateZone={handleUpdateZone}
                   onDeleteZone={handleDeleteZone}
@@ -488,6 +489,7 @@ export default function App() {
               {activeTab === "reports" && (
                 <ReportsView
                   reports={reports}
+                  stats={stats}
                 />
               )}
 

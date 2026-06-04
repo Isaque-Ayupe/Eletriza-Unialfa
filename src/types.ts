@@ -60,13 +60,6 @@ export interface Report {
   downloadUrl?: string;
 }
 
-export interface ErrorSimulationRequest {
-  anomalyType: string;
-  zoneId: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  notes?: string;
-}
-
 export interface ErrorSimulationResponse {
   success: boolean;
   alert: Alert;

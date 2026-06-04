@@ -4,13 +4,19 @@ import { Zone } from "../types";
 
 interface EnvironmentsViewProps {
   zones: Zone[];
+  stats: {
+    totalZones: number;
+    optimizationCount: number;
+    currentLoadKw: number;
+    comfortIndex: number;
+  };
   onAddZone: (newZone: Omit<Zone, "id" | "statusLabel" | "status" | "aiRecommendation" | "consumptionLabel" | "occupancyLabel">) => Promise<void>;
   onUpdateZone: (id: string, updatedZone: Omit<Zone, "id" | "statusLabel" | "status" | "aiRecommendation" | "consumptionLabel" | "occupancyLabel">) => Promise<void>;
   onDeleteZone: (id: string) => Promise<void>;
   loading: boolean;
 }
 
-export default function EnvironmentsView({ zones, onAddZone, onUpdateZone, onDeleteZone, loading }: EnvironmentsViewProps) {
+export default function EnvironmentsView({ zones, stats, onAddZone, onUpdateZone, onDeleteZone, loading }: EnvironmentsViewProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState<"ALL" | "INEFFICIENT" | "OPTIMAL">("ALL");
   const [showAddForm, setShowAddForm] = useState(false);
@@ -100,9 +106,9 @@ export default function EnvironmentsView({ zones, onAddZone, onUpdateZone, onDel
     return matchesSearch && matchesStatus;
   });
 
-  const totalZonesCount = zones.length + 39; // Base 42 + new additions
-  const optimizationOpportunities = zones.filter(z => z.status === "INEFFICIENT").length + 5;
-  const currentTotalLoad = zones.reduce((sum, z) => sum + z.consumptionValue, 0) + 1100; // Base load approx 1.2MW as in screen
+  const totalZonesCount = stats.totalZones;
+  const optimizationOpportunities = stats.optimizationCount;
+  const currentTotalLoad = stats.currentLoadKw;
   return (
     <div className="space-y-6">
       
