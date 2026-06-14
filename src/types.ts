@@ -63,9 +63,28 @@ export interface Report {
 export interface ErrorSimulationResponse {
   success: boolean;
   alert: Alert;
+  anomaly?: Anomaly;
   aiFeedback?: {
     diagnostic: string;
     actionTaken: string;
     savingsImpact: string;
   };
 }
+
+export interface Anomaly {
+  id: string;
+  anomalyType: string;
+  zoneId: string | null;
+  zoneName: string | null;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  status: 'active' | 'resolved' | 'dismissed';
+  notes: string;
+  diagnostic: string;
+  actionTaken: string;
+  savingsImpact: string;
+  alertId: string | null;
+  snapshotBefore: Record<string, any>;
+  snapshotAfter: Record<string, any>;
+  createdAt: string | null;
+}
+

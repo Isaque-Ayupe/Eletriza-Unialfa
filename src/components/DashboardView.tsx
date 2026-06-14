@@ -357,11 +357,6 @@ export default function DashboardView({ zones, agents, alerts, stats, onSimulate
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-center gap-4">
                     <h4 className="text-xs font-bold text-[var(--fg)] truncate">{al.title}</h4>
-                    {al.isSimulated && (
-                      <span className="text-[8px] uppercase font-black tracking-widest bg-purple-100 border border-purple-300 text-purple-700 px-1.5 py-0.5">
-                        MOCK
-                      </span>
-                    )}
                   </div>
                   <p className="text-[11px] text-slate-700 leading-normal mt-1">{al.description}</p>
                   

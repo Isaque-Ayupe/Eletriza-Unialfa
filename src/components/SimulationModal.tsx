@@ -20,6 +20,14 @@ export default function SimulationModal({ isOpen, onClose, zones, onSimulationSu
 
   if (!isOpen) return null;
 
+  const resetAndClose = () => {
+    setFeedback(null);
+    setErrorMessage("");
+    setNotes("");
+    setLoading(false);
+    onClose();
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -46,15 +54,21 @@ export default function SimulationModal({ isOpen, onClose, zones, onSimulationSu
       if (data.success && data.aiFeedback) {
         setFeedback(data.aiFeedback);
         const selectedZone = zones.find(z => z.id === zoneId)?.name || "Instalação Geral";
-        onSimulationSuccess(data.aiFeedback, `Simulação: ${anomalyType} em ${selectedZone}`);
+        onSimulationSuccess(data.aiFeedback, `Anomalia: ${anomalyType} em ${selectedZone}`);
       } else {
-        throw new Error("Resposta inválida do servidor de simulação.");
+        throw new Error("Resposta inválida do servidor.");
       }
     } catch (err: any) {
       setErrorMessage(err.message || "Erro de conexão com o back-end.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleNewSimulation = () => {
+    setFeedback(null);
+    setErrorMessage("");
+    setNotes("");
   };
 
   const anomalies = [
@@ -74,11 +88,11 @@ export default function SimulationModal({ isOpen, onClose, zones, onSimulationSu
         <div className="flex items-center justify-between p-6 border-b border-[var(--fg)]">
           <div className="flex items-center gap-3">
             <Play className="w-5 h-5 text-[var(--fg)] fill-[var(--fg)]" />
-            <h2 className="text-sm font-bold uppercase tracking-wider text-[var(--fg)] font-mono">Simular Problema de Telemetria</h2>
+            <h2 className="text-sm font-bold uppercase tracking-wider text-[var(--fg)] font-mono">Gerar Anomalia Real</h2>
           </div>
           <button 
             type="button"
-            onClick={onClose}
+            onClick={resetAndClose}
             className="p-1 border border-[var(--fg)] text-[var(--fg)] hover:bg-[var(--bg)] transition-colors"
           >
             <X className="w-4 h-4" />
@@ -92,8 +106,9 @@ export default function SimulationModal({ isOpen, onClose, zones, onSimulationSu
               
               {/* Informative text */}
               <p className="text-xs text-slate-700 leading-relaxed font-mono">
-                Este simulador transmite um sinal de telemetria irregular ao back-end ativo. 
-                Os dados de telemetria serão analisados em tempo real pelo agente EnergiAI para produzir diagnósticos estruturados e ações corretivas coordenadas.
+                Este gerador aplica anomalias REAIS nas zonas selecionadas, alterando telemetria 
+                de temperatura, umidade e consumo. Os dados serão analisados em tempo real pelo 
+                agente EnergiAI para produzir diagnósticos e ações corretivas coordenadas.
               </p>
 
               {/* Anomaly selection */}
@@ -192,8 +207,8 @@ export default function SimulationModal({ isOpen, onClose, zones, onSimulationSu
             <div className="space-y-6 animate-fade-in font-sans">
               <div className="flex flex-col items-center text-center p-4 bg-green-50 border border-green-300">
                 <CheckCircle className="w-10 h-10 text-green-700 mb-3" />
-                <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--fg)]">Anomalia Registrada com Sucesso!</h3>
-                <p className="text-xs text-slate-600 mt-1">A telemetria foi enviada e o registro de alertas ativos no servidor foi atualizado.</p>
+                <h3 className="text-sm font-bold uppercase tracking-wider text-[var(--fg)]">Anomalia Real Registrada!</h3>
+                <p className="text-xs text-slate-600 mt-1">A telemetria da zona foi alterada e o registro de anomalias foi salvo no banco de dados.</p>
               </div>
 
               <div className="space-y-4 font-sans">
@@ -236,7 +251,7 @@ export default function SimulationModal({ isOpen, onClose, zones, onSimulationSu
             <>
               <button
                 type="button"
-                onClick={onClose}
+                onClick={resetAndClose}
                 className="px-5 py-2 border border-[var(--fg)] text-[var(--fg)] bg-[var(--panel)] hover:bg-[var(--bg)] transition-colors text-xs font-bold uppercase tracking-wide font-mono"
               >
                 Cancelar
@@ -255,22 +270,32 @@ export default function SimulationModal({ isOpen, onClose, zones, onSimulationSu
                 ) : (
                   <>
                     <Play className="w-3.5 h-3.5 fill-current" />
-                    <span>Enviar Carga de Telemetria</span>
+                    <span>Gerar Anomalia Real</span>
                   </>
                 )}
               </button>
             </>
           ) : (
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-6 py-2 border border-[var(--fg)] bg-[var(--fg)] text-white hover:bg-[var(--fg)]/90 transition-all text-xs font-bold font-mono uppercase"
-            >
-              Concluído
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleNewSimulation}
+                className="px-5 py-2 border border-[var(--fg)] text-[var(--fg)] bg-[var(--panel)] hover:bg-[var(--bg)] transition-colors text-xs font-bold uppercase tracking-wide font-mono"
+              >
+                Nova Anomalia
+              </button>
+              <button
+                type="button"
+                onClick={resetAndClose}
+                className="px-6 py-2 border border-[var(--fg)] bg-[var(--fg)] text-white hover:bg-[var(--fg)]/90 transition-all text-xs font-bold font-mono uppercase"
+              >
+                Concluído
+              </button>
+            </div>
           )}
         </div>
       </div>
     </div>
   );
 }
+
